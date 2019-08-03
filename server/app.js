@@ -19,8 +19,10 @@ app.get('/', (_req, res) => {
 
 const port = process.env.PORT || 1000;
 
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`);
-});
+if (!module.parent) {
+  app.listen(port, () => {
+      console.log("Listening on port " + port);
+  });
+}
 
 export default app;
