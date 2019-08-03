@@ -1,4 +1,6 @@
-# join-u
+[![Build Status](https://travis-ci.com/EphraimDev/car-pooling.svg?branch=develop)](https://travis-ci.com/EphraimDev/car-pooling)    [![Coverage Status](https://coveralls.io/repos/github/EphraimDev/car-pooling/badge.svg?branch=develop)](https://coveralls.io/github/EphraimDev/car-pooling?branch=develop)    [![Maintainability](https://api.codeclimate.com/v1/badges/3b4023d98af2067e3fc3/maintainability)](https://codeclimate.com/github/EphraimDev/car-pooling/maintainability)     [![Test Coverage](https://api.codeclimate.com/v1/badges/3b4023d98af2067e3fc3/test_coverage)](https://codeclimate.com/github/EphraimDev/car-pooling/test_coverage)
+
+# Car-pooling
 
 ### Style guide
 
@@ -9,6 +11,8 @@
 - [Nodejs](https://nodejs.org/en/)
 - [Expressjs](https://expressjs.com/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Mocha](https://mochajs.org/)
+- [Chai](http://www.chaijs.com/)
 
 ### Features
 
@@ -46,7 +50,7 @@ If you don't have **PostgreSQL** installed, go to the [PostgreSQL website](https
 To install this app
 
 ```
-git clone https://github.com/EphraimDev/join-u.git
+git clone https://github.com/EphraimDev/car-pooling.git
 ```
 
 cd into the project folder and install the required dependencies
@@ -64,8 +68,19 @@ Create a `.env` file by running `cp .env.sample .env` on your terminal
 
 Update your `.env` file with the necessary informations
 
+Run server
+
+```
+npm run start:dev
+```
+
 ## Running the tests
 
+To run test cases
+
+```
+npm run test:db
+```
 
 ### To view the documentation
 
