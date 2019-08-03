@@ -7,18 +7,20 @@
     "start": "node ./dist/app.js",
     "start:dev": "nodemon --exec babel-node server/app.js",
     "build": "babel ./server --out-dir dist",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "eslint": "./node_modules/.bin/eslint --fix ./server/**/*.js",
+    "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --timeout 6000 test/index.js --exit"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/EphraimDev/join-u.git"
+    "url": "git+https://github.com/EphraimDev/car-pooling.git"
   },
   "author": "Ephraim Aigbefo",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/EphraimDev/join-u/issues"
+    "url": "https://github.com/EphraimDev/car-pooling/issues"
   },
-  "homepage": "https://github.com/EphraimDev/join-u#readme",
+  "homepage": "https://github.com/EphraimDev/car-pooling#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
     "express": "^4.17.1",
@@ -29,10 +31,18 @@
     "@babel/core": "^7.5.5",
     "@babel/node": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
+    "@istanbuljs/nyc-config-babel": "^2.1.1",
+    "babel-plugin-istanbul": "^5.2.0",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
+    "coveralls": "^3.0.5",
+    "cross-env": "^5.2.0",
     "eslint": "^5.16.0",
     "eslint-config-airbnb-base": "^13.2.0",
     "eslint-plugin-import": "^2.18.2",
+    "mocha": "^6.2.0",
     "nodemon": "^1.19.1",
+    "nyc": "^14.1.1",
     "prettier": "^1.18.2"
   }
 }
