@@ -8,5 +8,6 @@
     ],
     "sourceMap": false,
   "instrument": false,
-  "extends": "@istanbuljs/nyc-config-babel"
+  "extends": "@istanbuljs/nyc-config-babel",
+  "exclude": "server/app.js"
 }
