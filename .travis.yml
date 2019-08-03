@@ -10,7 +10,6 @@ env:
     - CC_TEST_REPORTER_ID=d859d41ac07b78f7bf0859c5a3bd9c4d243c9bf5e44c8b8d889e814422457ed3
 
 before_script:
-  - psql -c 'CREATE DATABASE joinu_test;' -U postgres
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
