@@ -1,0 +1,27 @@
+import Joi from '@hapi/joi';
+import { signupSchema } from '../utils/joi';
+import JSONResponse from '../helper/responseHandler';
+
+
+
+class AuthValidations {
+    static signup(req, res, next){
+        const data = req.body;
+        const { error } = Joi.validate(data, signupSchema);
+
+        const valid = error == null; 
+
+        if (!valid) { 
+            // res.status(422).json({ 
+            // message: 'Invalid request', 
+            // data: body 
+            // }) 
+
+            return JSONResponse.error(res, 'error', 422, error.details[0].message);
+        }
+
+        return next();
+    }
+}
+
+export default AuthValidations;
