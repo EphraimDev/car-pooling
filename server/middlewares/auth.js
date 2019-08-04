@@ -6,7 +6,6 @@ import secret from '../config/jwt';
  * @class Authorization
  */
 class Authorization {
-
   /**
    * @method generateToken
    * @memberof Authorization

@@ -24,7 +24,7 @@ const port = process.env.PORT || 1000;
 
 if (!module.parent) {
   app.listen(port, () => {
-      console.log("Listening on port " + port);
+    console.log(`Listening on port ${port}`);
   });
 }
 

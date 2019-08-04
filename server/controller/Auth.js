@@ -27,7 +27,7 @@ class AuthController {
       return jsonResponse.error(res, 'error', 409, 'User exists already');
     }
 
-    const admin = is_admin === 'true'? true: false;
+    const admin = is_admin === 'true';
     const hashedPassword = await bcrypt.hashSync(password, 10);
 
     const newUser = await pool.query(queryHelper.createUser, [email.toLowerCase(), first_name,
@@ -43,12 +43,11 @@ class AuthController {
     return jsonResponse.success(res, 'success', 201, data);
   }
 
-  static async findUserByEmail(email){
+  static async findUserByEmail(email) {
     const findUser = await pool.query(queryHelper.findUserByEmail, [email.toLowerCase()]);
 
     return findUser;
   }
-
 }
 
 export default AuthController;
