@@ -71,8 +71,6 @@ const queryText = `DROP TABLE IF EXISTS booking, trip, vehicle, users CASCADE;
       trip_id INT REFERENCES trip(trip_id) NOT NULL,
       user_id INT REFERENCES users(user_id) NOT NULL,
       seat_number INT,
-      deleted BOOLEAN DEFAULT '0',
-      created_at TIMESTAMP,
       deleted BOOLEAN Default '0',
       created_at TIMESTAMP,
       updated_at TIMESTAMP,
