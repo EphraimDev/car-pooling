@@ -7,8 +7,18 @@ const signupSchema = Joi.object().keys({
     .required(),
   password: Joi.string().regex(/^[a-zA-Z0-9$@$!%*?&]{3,30}$/).required(),
   email: Joi.string().email({ minDomainSegments: 2 }).required(),
-  is_admin: Joi.boolean()
+  is_admin: Joi.boolean(),
+  dob: Joi.string(),
+  street: Joi.string(),
+  city: Joi.string(),
+  state: Joi.string(),
+  country: Joi.string(),
+});
+
+const signinSchema = Joi.object().keys({
+  password: Joi.string().regex(/^[a-zA-Z0-9$@$!%*?&]{3,30}$/).required(),
+  email: Joi.string().email({ minDomainSegments: 2 }).required(),
 });
 
 
-export { signupSchema };
+export { signupSchema, signinSchema };
