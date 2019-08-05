@@ -3,6 +3,8 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import morganLogger from 'morgan';
 
+import router from './routes';
+
 const app = express();
 
 app.use(morganLogger('dev'));
@@ -12,6 +14,7 @@ app.use(
   }),
 );
 app.use(bodyParser.json());
+app.use('/api/v1', router);
 
 app.get('/', (_req, res) => {
   res.status(200).send('Welcome to Join U');
@@ -21,7 +24,7 @@ const port = process.env.PORT || 1000;
 
 if (!module.parent) {
   app.listen(port, () => {
-      console.log("Listening on port " + port);
+    console.log(`Listening on port ${port}`);
   });
 }
 
