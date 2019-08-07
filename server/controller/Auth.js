@@ -1,9 +1,7 @@
 import bcrypt from 'bcrypt';
 import Authorization from '../middlewares/auth';
-import pool from '../model/index';
-import moment from '../utils/moment';
-import queryHelper from '../helper/queries';
 import jsonResponse from '../helper/responseHandler';
+import { findUserByEmail, createUser } from '../utils/queries';
 
 /**
  * @exports
@@ -21,7 +19,7 @@ class AuthController {
       first_name, last_name, email, password, is_admin,
     } = req.body;
 
-    const findUser = await AuthController.findUserByEmail(email);
+    const findUser = await findUserByEmail(email);
 
     if (findUser.rowCount >= 1) {
       return jsonResponse.error(res, 'error', 409, 'User exists already');
@@ -30,8 +28,7 @@ class AuthController {
     const admin = is_admin === 'true';
     const hashedPassword = await bcrypt.hashSync(password, 10);
 
-    const newUser = await pool.query(queryHelper.createUser, [email.toLowerCase(), first_name,
-      last_name, hashedPassword, admin, moment.createdAt]);
+    const newUser = await createUser(email, first_name, last_name, hashedPassword, admin);
 
     const token = await Authorization.generateToken(newUser.rows[0]);
 
@@ -52,7 +49,7 @@ class AuthController {
   static async signin(req, res) {
     const { email, password } = req.body;
 
-    const findUser = await pool.query(queryHelper.findUserByEmail, [email.toLowerCase()]);
+    const findUser = await findUserByEmail(email);
 
     if (findUser.rowCount < 1) {
       return jsonResponse.error(res, 'error', 404, 'User does not exist');
@@ -83,12 +80,6 @@ class AuthController {
    */
   static verifyPassword(password, hash) {
     return bcrypt.compare(password, hash);
-  }
-
-  static async findUserByEmail(email) {
-    const findUser = await pool.query(queryHelper.findUserByEmail, [email.toLowerCase()]);
-
-    return findUser;
   }
 }
 
