@@ -2,12 +2,6 @@ import pool from '../model';
 import query from '../helper/queries';
 import moment from './moment';
 
-export const findUserById = async (userId) => {
-  const user = await pool.query(query.findUserById, [userId]);
-
-  return user;
-};
-
 export const findUserByEmail = async (email) => {
   const user = await pool.query(query.findUserByEmail, [email.toLowerCase()]);
 

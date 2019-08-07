@@ -17,7 +17,6 @@ class UserController {
   static async updateProfile(req, res) {
     const { userId } = req.params;
 
-    try {
       const {
         firstname, lastname, admin, pass, street, city, state, country, dob,
       } = await UserController.bodyParams(req);
@@ -29,9 +28,7 @@ class UserController {
       );
 
       return jsonResponse.success(res, 'success', 200, updatedUser.rows[0]);
-    } catch (error) {
-      return jsonResponse.error(res, 'error', 500, 'An internal error occured');
-    }
+    
   }
 
   static async uploadImage(req, image) {

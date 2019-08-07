@@ -41,6 +41,25 @@ describe('Users Profile', () => {
               .set('authorization', token)
                 .field('first_name', 'Way')
                 .field('last_name', 'Fare')
+                .field('is_admin', 'true')
+                .field('password', 'Qwerty')
+                .attach('image', './test/files/autograder.png', 'autograder.png')
+                .then((res) => {
+                    const body = res.body;
+                    expect(res.status).to.equal(200);
+                    expect(body).to.contain.property('status');
+                    expect(body).to.contain.property('data');
+                    expect(body.status).to.equal("success");
+                    expect(body.data).to.be.an("object");
+                    done()
+                })
+          });
+
+          it('should update a user profile', (done) => {
+            chai.request(app)
+              .patch(`/api/v1/user/1`)
+              .set('authorization', token)
+                .field('state', 'Lagos')
                 .then((res) => {
                     const body = res.body;
                     expect(res.status).to.equal(200);
@@ -58,7 +77,6 @@ describe('Users Profile', () => {
             .set('authorization', noneToken)
             .field('first_name', 'Way')
             .field('last_name', 'Fare')
-            .attach('image', './test/files/autograder.png', 'autograder.png')
             .then((res) => {
                 const body = res.body;
                 expect(res.status).to.equal(401);
