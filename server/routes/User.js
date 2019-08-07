@@ -7,5 +7,6 @@ import UserValidations from '../validations/user';
 const router = express.Router();
 
 router.patch('/:userId', authorization.authenticate, authorization.authorize, upload.single('image'), UserValidations.updateUser, user.updateProfile);
+router.get('/:userId', authorization.authenticate, authorization.authorize, user.viewProfile);
 
 export default router;

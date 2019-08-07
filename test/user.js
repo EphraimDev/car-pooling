@@ -122,6 +122,22 @@ describe('Users Profile', () => {
                     done()
                 })
           });
-        
+    });
+
+    describe('GET /api/v1/user/:userId', () => {
+        it('should return profile of the selected user',  (done) => {
+            chai.request(app)
+            .get(`/api/v1/user/1`)
+            .set('authorization', token)
+            .then((res) => {
+                const body = res.body;
+                expect(res.status).to.equal(200);
+                expect(body).to.contain.property('status');
+                expect(body).to.contain.property('data');
+                expect(body.status).to.equal("success");
+                expect(body.data).to.be.an("object");
+                done()
+            })
+        });
     });
 })

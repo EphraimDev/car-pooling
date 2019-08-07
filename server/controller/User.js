@@ -31,6 +31,17 @@ class UserController {
     
   }
 
+  /**
+   * View user profile
+   * @param  {object} req - Request object
+   * @param {object} res - Response object
+   * @return {json} res.json
+   */
+  static async viewProfile(req, res){
+    
+    return jsonResponse.success(res, 'success', 200, req.user);
+  }
+
   static async uploadImage(req, image) {
     let img = '';
 
