@@ -9,5 +9,9 @@
     "sourceMap": false,
   "instrument": false,
   "extends": "@istanbuljs/nyc-config-babel",
-  "exclude": "server/app.js"
+  "exclude": [
+    "server/app.js",
+    "server/config/db.js",
+    "server/model/index.js"
+    ]
 }
