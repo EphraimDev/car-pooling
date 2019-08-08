@@ -8,6 +8,7 @@ chai.should();
 
 chai.use(chaiHttp);
 let token = 'bearer ';
+let anotherToken = 'bearer ';
 
 describe('Vehicles', () => {
   describe('POST /api/v1/vehicles', () => {
@@ -21,6 +22,20 @@ describe('Vehicles', () => {
         .then((res) => {
           const { body } = res;
           token += body.data.token;
+          done();
+        });
+    });
+
+    it('should sign in', (done) => {
+      chai.request(app)
+        .post('/api/v1/auth/signin')
+        .send({
+          email: 'another@test.co',
+          password: 'Password1!',
+        })
+        .then((res) => {
+          const { body } = res;
+          anotherToken += body.data.token;
           done();
         });
     });
@@ -78,6 +93,59 @@ describe('Vehicles', () => {
               expect(body).to.contain.property('error');
               expect(body.error).to.be.a("string");
               expect(body.error).to.equal('"number_plate" is required');
+              done()
+          })
+    });
+  });
+
+  describe('PATCH /api/v1/vehicles/:vehicleId', () => {
+
+    it('should update a vehicle', (done) => {
+      chai.request(app)
+        .patch('/api/v1/vehicles/1')
+        .set('authorization', token)
+        .field('number_plate', 'ABC123')
+        .then((res) => {
+          const { body } = res;
+          expect(res.status).to.equal(200);
+          expect(body).to.contain.property('status');
+          expect(body).to.contain.property('data');
+          expect(body.status).to.equal('success');
+          expect(body.data).to.be.an('object');
+          done();
+        });
+    });
+
+    it('should check for vehicle that does not exist', (done) => {
+      chai.request(app)
+        .patch('/api/v1/vehicles/5')
+        .set('authorization', token)
+        .field('number_plate', 'ABC12')
+        .then((res) => {
+          const { body } = res;
+          expect(res.status).to.equal(404);
+          expect(body).to.contain.property('status');
+          expect(body).to.contain.property('error');
+          expect(body.status).to.equal('error');
+          expect(body.error).to.be.a('string');
+          expect(body.error).to.equal('Vehicle does not exist');
+          done();
+        });
+    });
+
+    it('should check for authorized user', (done) => {
+      chai.request(app)
+        .patch(`/api/v1/vehicles/1`)
+        .set('authorization', anotherToken)
+        .field('number_plate', 'ABC12R')
+          .then((res) => {
+              const body = res.body;
+              expect(res.status).to.equal(401);
+            expect(body).to.contain.property('status');
+            expect(body).to.contain.property('error');
+            expect(body.status).to.equal('error');
+            expect(body.error).to.be.a('string');
+            expect(body.error).to.equal('Unauthorized user');
               done()
           })
     });
