@@ -66,6 +66,21 @@ describe('Vehicles', () => {
           done();
         });
     });
+
+    it('should validate vehicle plate number', (done) => {
+      chai.request(app)
+        .post(`/api/v1/vehicles`)
+        .set('authorization', token)
+          .field('color', 'W')
+          .then((res) => {
+              const body = res.body;
+              expect(res.status).to.equal(422);
+              expect(body).to.contain.property('error');
+              expect(body.error).to.be.a("string");
+              expect(body.error).to.equal('"number_plate" is required');
+              done()
+          })
+    });
   });
 
 });
