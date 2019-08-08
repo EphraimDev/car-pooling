@@ -1,5 +1,5 @@
 import jsonResponse from '../helper/responseHandler';
-import { findVehicleByPlateNo, createVehicle } from '../utils/queries';
+import { findVehicleByPlateNo, createVehicle, findVehicleById, updateVehicle } from '../utils/queries';
 import { uploadImage } from '../utils/upload';
 
 /**
@@ -33,6 +33,38 @@ class VehicleController {
   
       return jsonResponse.success(res, 'success', 201, data);
     }
+
+    /**
+   * Update vehicle
+   * @param  {object} req - Request object
+   * @param {object} res - Response object
+   * @return {json} res.json
+   */
+  static async update(req, res) {
+    const { vehicleId } = req.params;
+    const {
+      number_plate, manufacturer, model, year, capacity, color
+    } = req.body;
+
+    const findVehicle = await findVehicleById(vehicleId);
+
+    if (findVehicle.rowCount < 1) {
+      return jsonResponse.error(res, 'error', 404, 'Vehicle does not exist');
+    }
+
+    if (findVehicle.rows[0].user_id !== req.user.user_id) {
+      return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
+    }
+
+      const img = await uploadImage(req, findVehicle.rows[0].img);
+
+      const result = await updateVehicle(
+        number_plate, manufacturer, model, year, capacity, color, img, vehicleId
+      );
+
+      return jsonResponse.success(res, 'success', 200, result.rows[0]);
+    
+  }
 
 }
 
