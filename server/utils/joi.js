@@ -33,5 +33,13 @@ const updateUserSchema = Joi.object().keys({
   country: Joi.string(),
 });
 
+const vehicleSchema = Joi.object().keys({
+  color: Joi.string(),
+  number_plate: Joi.string().required(),
+  manufacturer: Joi.string(),
+  model: Joi.string(),
+  year: Joi.string(),
+  capacity: Joi.string(),
+});
 
-export { signupSchema, signinSchema, updateUserSchema };
+export { signupSchema, signinSchema, updateUserSchema, vehicleSchema };

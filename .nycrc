@@ -12,6 +12,8 @@
   "exclude": [
     "server/app.js",
     "server/config/db.js",
-    "server/model/index.js"
+    "server/model/index.js",
+    "server/utils/joi.js",
+    "server/helper/queries.js"
     ]
 }

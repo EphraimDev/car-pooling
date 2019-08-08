@@ -24,3 +24,17 @@ export const updateUser = async (
 
   return user;
 };
+
+export const findVehicleByPlateNo = async (number) => {
+  const vehicle = await pool.query(query.findVehicleByPlateNo, [number.toLowerCase()]);
+
+  return vehicle;
+};
+
+export const createVehicle = async (id, number_plate, manufacturer,
+  model, year, capacity, color, img) => {
+  const vehicle = await pool.query(query.createVehicle, [id,number_plate.toLowerCase(), manufacturer,
+    model, year, capacity, color, img, moment.createdAt]);
+
+  return vehicle;
+};
