@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jsonResponse from '../helper/responseHandler';
-import upload from '../utils/cloudinary';
 import { updateUser } from '../utils/queries';
+import { uploadImage } from '../utils/upload';
 
 /**
  * @exports
@@ -21,7 +21,7 @@ class UserController {
         firstname, lastname, admin, pass, street, city, state, country, dob,
       } = await UserController.bodyParams(req);
 
-      const image = await UserController.uploadImage(req, req.user.img);
+      const image = await uploadImage(req, req.user.img);
 
       const updatedUser = await updateUser(
         firstname, lastname, pass, image, admin, street, city, state, country, dob, userId,
@@ -40,18 +40,6 @@ class UserController {
   static async viewProfile(req, res){
     
     return jsonResponse.success(res, 'success', 200, req.user);
-  }
-
-  static async uploadImage(req, image) {
-    let img = '';
-
-    if (req.file) {
-      await upload(req);
-
-      img = req.body.imageURL !== undefined ? req.body.imageURL : image;
-    }
-
-    return img;
   }
 
   static async bodyParams(req) {
