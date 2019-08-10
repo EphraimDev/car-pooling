@@ -3,8 +3,7 @@ import { vehicleSchema } from '../utils/joi';
 import JSONResponse from '../helper/responseHandler';
 
 
-class VehicleValidations{
-  static add(req, res, next) {
+const vehicle = (req, res, next) => {
     const data = req.body;
     const { error } = Joi.validate(data, vehicleSchema);
 
@@ -15,7 +14,6 @@ class VehicleValidations{
     }
 
     return next();
-  }
 }
 
-export default VehicleValidations;
+export default vehicle;

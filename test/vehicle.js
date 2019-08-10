@@ -86,15 +86,15 @@ describe('Vehicles', () => {
       chai.request(app)
         .post(`/api/v1/vehicles`)
         .set('authorization', token)
-          .field('color', 'W')
-          .then((res) => {
-              const body = res.body;
-              expect(res.status).to.equal(422);
-              expect(body).to.contain.property('error');
-              expect(body.error).to.be.a("string");
-              expect(body.error).to.equal('"number_plate" is required');
-              done()
-          })
+        .field('color', 'W')
+        .then((res) => {
+            const body = res.body;
+            expect(res.status).to.equal(422);
+            expect(body).to.contain.property('error');
+            expect(body.error).to.be.a("string");
+            expect(body.error).to.equal('"number_plate" is required');
+            done()
+        })
     });
   });
 
@@ -104,7 +104,7 @@ describe('Vehicles', () => {
       chai.request(app)
         .patch('/api/v1/vehicles/1')
         .set('authorization', token)
-        .field('number_plate', 'ABC123')
+        .field('number_plate', 'ABC12')
         .then((res) => {
           const { body } = res;
           expect(res.status).to.equal(200);
@@ -139,16 +139,49 @@ describe('Vehicles', () => {
         .set('authorization', anotherToken)
         .field('number_plate', 'ABC12R')
           .then((res) => {
-              const body = res.body;
-              expect(res.status).to.equal(401);
+            const body = res.body;
+            expect(res.status).to.equal(401);
             expect(body).to.contain.property('status');
             expect(body).to.contain.property('error');
             expect(body.status).to.equal('error');
             expect(body.error).to.be.a('string');
             expect(body.error).to.equal('Unauthorized user');
-              done()
+            done()
           })
     });
   });
 
+  describe('GET /api/v1/vehicles/:vehicleId', () => {
+
+    it('should return a vehicle data', (done) => {
+      chai.request(app)
+        .get('/api/v1/vehicles/1')
+        .set('authorization', token)
+        .then((res) => {
+          const { body } = res;
+          expect(res.status).to.equal(200);
+          expect(body).to.contain.property('status');
+          expect(body).to.contain.property('data');
+          expect(body.status).to.equal('success');
+          expect(body.data).to.be.an('object');
+          done();
+        });
+    });
+
+    it('should check for vehicle that does not exist', (done) => {
+      chai.request(app)
+        .get('/api/v1/vehicles/5')
+        .set('authorization', token)
+        .then((res) => {
+          const { body } = res;
+          expect(res.status).to.equal(404);
+          expect(body).to.contain.property('status');
+          expect(body).to.contain.property('error');
+          expect(body.status).to.equal('error');
+          expect(body.error).to.be.a('string');
+          expect(body.error).to.equal('Vehicle does not exist');
+          done();
+        });
+    });
+  });
 });

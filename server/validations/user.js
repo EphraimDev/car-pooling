@@ -1,12 +1,11 @@
 import Joi from '@hapi/joi';
-import { updateUserSchema } from '../utils/joi';
+import { userSchema } from '../utils/joi';
 import JSONResponse from '../helper/responseHandler';
 
 
-class UserValidations {
-  static updateUser(req, res, next) {
+const user = (req, res, next) => {
     const data = req.body;
-    const { error } = Joi.validate(data, updateUserSchema);
+    const { error } = Joi.validate(data, userSchema);
 
     const valid = error == null;
 
@@ -15,7 +14,6 @@ class UserValidations {
     }
 
     return next();
-  }
 }
 
-export default UserValidations;
+export default user;

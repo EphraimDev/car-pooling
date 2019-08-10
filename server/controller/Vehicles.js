@@ -66,6 +66,24 @@ class VehicleController {
     
   }
 
+  /**
+   * View vehicle data
+   * @param  {object} req - Request object
+   * @param {object} res - Response object
+   * @return {json} res.json
+   */
+  static async view(req, res){
+    const { vehicleId } = req.params;
+
+    const findVehicle = await findVehicleById(vehicleId);
+
+    if (findVehicle.rowCount < 1) {
+      return jsonResponse.error(res, 'error', 404, 'Vehicle does not exist');
+    }
+    
+    return jsonResponse.success(res, 'success', 200, findVehicle.rows[0]);
+  }
+
 }
 
 export default VehicleController;
