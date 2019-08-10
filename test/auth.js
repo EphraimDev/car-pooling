@@ -74,11 +74,10 @@ describe('Users Authentication', () => {
             })
         });
 
-        it('should check for no password',  (done) => {
+        it('should check for no email',  (done) => {
             chai.request(app)
             .post('/api/v1/auth/signup')
             .send({
-                email: "test@test.co",
                 first_name: "Abe",
                 last_name: "Farer"
             })
@@ -87,7 +86,7 @@ describe('Users Authentication', () => {
                 expect(res.status).to.equal(422);
                 expect(body).to.contain.property('error');
                 expect(body.error).to.be.a("string");
-                expect(body.error).to.equal('"password" is required');
+                expect(body.error).to.equal('"email" is required');
                 done()
             })
         });
@@ -155,7 +154,7 @@ describe('Users Authentication', () => {
             chai.request(app)
             .post('/api/v1/auth/signin')
             .send({
-                email: "non@test.co"
+                password: "Non@testco"
             })
             .then((res) => {
                 const body = res.body;
@@ -164,7 +163,7 @@ describe('Users Authentication', () => {
                 expect(body).to.contain.property('error');
                 expect(body.status).to.equal("error");
                 expect(body.error).to.be.a("string");
-                expect(body.error).to.equal('"password\" is required');
+                expect(body.error).to.equal('"email" is required');
                 done()
             })
         });
