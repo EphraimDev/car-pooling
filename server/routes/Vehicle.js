@@ -9,5 +9,6 @@ const router = express.Router();
 router.post('/', authorization.authenticate, upload.single('image'), vehicle, VehicleController.addVehicle);
 router.patch('/:vehicleId', authorization.authenticate, upload.single('image'), vehicle, VehicleController.update);
 router.get('/:vehicleId', authorization.authenticate, VehicleController.view);
+router.delete('/:vehicleId', authorization.authenticate, VehicleController.delete);
 
 export default router;
