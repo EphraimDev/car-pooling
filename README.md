@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/EphraimDev/car-pooling.svg?branch=develop)](https://travis-ci.com/EphraimDev/car-pooling)    [![Coverage Status](https://coveralls.io/repos/github/EphraimDev/car-pooling/badge.svg?branch=develop)](https://coveralls.io/github/EphraimDev/car-pooling?branch=develop)    [![Maintainability](https://api.codeclimate.com/v1/badges/3b4023d98af2067e3fc3/maintainability)](https://codeclimate.com/github/EphraimDev/car-pooling/maintainability)     [![Test Coverage](https://api.codeclimate.com/v1/badges/3b4023d98af2067e3fc3/test_coverage)](https://codeclimate.com/github/EphraimDev/car-pooling/test_coverage)
+[![Build Status](https://travis-ci.com/EphraimDev/car-pooling.svg?branch=develop)](https://travis-ci.com/EphraimDev/car-pooling)    <!-- [![Coverage Status](https://coveralls.io/repos/github/EphraimDev/car-pooling/badge.svg?branch=develop)](https://coveralls.io/github/EphraimDev/car-pooling?branch=develop)    [![Maintainability](https://api.codeclimate.com/v1/badges/3b4023d98af2067e3fc3/maintainability)](https://codeclimate.com/github/EphraimDev/car-pooling/maintainability)     [![Test Coverage](https://api.codeclimate.com/v1/badges/3b4023d98af2067e3fc3/test_coverage)](https://codeclimate.com/github/EphraimDev/car-pooling/test_coverage) -->
 
 # Car-pooling
 
@@ -79,13 +79,50 @@ npm run start:dev
 To run test cases
 
 ```
-npm run test:db
+npm test
 ```
 
 ### To view the documentation
 
 ### Working Routes
 
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Functionality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>POST api/v1/auth/signup</td>
+<td>Create new user</td>
+</tr>
+<tr>
+<td>POST api/v1/auth/signin</td>
+<td>Sign in user</td>
+</tr>
+<tr>
+<td>PATCH api/v1/user/:userId</td>
+<td>Modify user data</td>
+</tr>
+<tr>
+<td>GET api/v1/user/:userId</td>
+<td>Fetch user data</td>
+</tr>
+<tr>
+<td>POST api/v1/vehicles</td>
+<td>Create new vehicle</td>
+</tr>
+<tr>
+<td>PATCH api/v1/vehicles/:vehicleId</td>
+<td>Fetch vehicle data</td>
+</tr>
+<tr>
+<td>GET api/v1/vehicles/:vehicleId</td>
+<td>Fetch all trips</td>
+</tr>
+</tbody></table>
 
 ## License
 
