@@ -1,5 +1,5 @@
 import jsonResponse from '../helper/responseHandler';
-import { findVehicleByPlateNo, createVehicle, findVehicleById, updateVehicle } from '../utils/queries';
+import { findVehicleByPlateNo, createVehicle, findVehicleById, updateVehicle, deleteVehicle } from '../utils/queries';
 import { uploadImage } from '../utils/upload';
 
 /**
@@ -82,6 +82,30 @@ class VehicleController {
     }
     
     return jsonResponse.success(res, 'success', 200, findVehicle.rows[0]);
+  }
+
+  /**
+   * Delete vehicle 
+   * @param  {object} req - Request object
+   * @param {object} res - Response object
+   * @return {json} res.json
+   */
+  static async delete(req, res){
+    const { vehicleId } = req.params;
+
+    const findVehicle = await findVehicleById(vehicleId);
+
+    if (findVehicle.rowCount < 1) {
+      return jsonResponse.error(res, 'error', 404, 'Vehicle does not exist');
+    }
+
+    if (req.user.user_id !== findVehicle.rows[0].user_id) {
+      return jsonResponse.error(res, 'error', 401, 'Unathorized access');
+    }
+
+    const delVehicle = await deleteVehicle(vehicleId);
+    
+    return jsonResponse.success(res, 'success', 200, delVehicle.rows[0]);
   }
 
 }

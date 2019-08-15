@@ -53,3 +53,9 @@ export const updateVehicle = async (
 
   return vehicle;
 };
+
+export const deleteVehicle = async (id) => {
+  const vehicle = await pool.query(query.deleteVehicle, [id]);
+
+  return vehicle;
+}
