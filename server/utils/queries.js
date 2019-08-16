@@ -59,3 +59,9 @@ export const deleteVehicle = async (id) => {
 
   return vehicle;
 }
+
+export const createTrip = async (id, vehicle, origin, destination, date, time, fare) => {
+  const trip = await pool.query(query.createTrip, [id,vehicle, origin, destination, date, time, fare, moment.createdAt]);
+
+  return trip;
+};

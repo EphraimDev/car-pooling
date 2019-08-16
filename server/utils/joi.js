@@ -22,4 +22,13 @@ const vehicleSchema = Joi.object().keys({
   capacity: Joi.string(),
 });
 
-export { userSchema, vehicleSchema };
+const tripSchema = Joi.object().keys({
+  date: Joi.string(),
+  time: Joi.string(),
+  fare: Joi.string(),
+  vehicle: Joi.string(),
+  origin: Joi.string(),
+  destination: Joi.string(),
+});
+
+export { userSchema, vehicleSchema, tripSchema };
