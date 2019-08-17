@@ -7,7 +7,8 @@ const query = {
   createVehicle: 'INSERT INTO vehicle(user_id, number_plate, manufacturer, model, year, capacity, color, img, created_at) values($1,$2,$3,$4,$5,$6,$7,$8,$9) RETURNING vehicle_id, number_plate, manufacturer, model, year, capacity, color, img',
   findVehicleById: 'SELECT vehicle.*, users.first_name, users.last_name, users.email, users.img FROM vehicle INNER JOIN users ON vehicle.user_id = users.user_id WHERE vehicle.vehicle_id=$1',
   updateVehicle: 'UPDATE vehicle SET number_plate=$1,manufacturer=$2,model=$3,year=$4,capacity=$5,color=$6,img=$7,updated_at=$8 WHERE vehicle_id = $9 RETURNING vehicle_id, number_plate, manufacturer, model, year, capacity, color, img',
-  deleteVehicle: 'DELETE FROM vehicle WHERE vehicle_id=$1;'
+  deleteVehicle: 'DELETE FROM vehicle WHERE vehicle_id=$1;',
+  createTrip: 'INSERT INTO trip(user_id,vehicle_id,origin,destination,trip_date,trip_time,fare,created_at) values($1,$2,$3,$4,$5,$6,$7,$8) RETURNING trip.*'
 };
 
 export default query;
