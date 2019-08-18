@@ -6,6 +6,12 @@ import trip from '../validations/trip';
 const router = express.Router();
 
 router.post('/', authorization.authenticate, trip, TripController.create);
-router.patch('/:tripId', authorization.authenticate, trip, TripController.update);
-
+router.get('/:tripId', authorization.authenticate,TripController.view);
+router.delete('/:tripId', authorization.authenticate,TripController.cancel);
+router.patch(
+  '/:tripId',
+  authorization.authenticate,
+  trip,
+  TripController.update
+);
 export default router;
