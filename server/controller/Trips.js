@@ -113,19 +113,21 @@ class TripController {
     if (findTrip.rows[0].user_id !== req.user.user_id) {
       return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
     }
-
     const vehicleId = findTrip.rows[0].vehicle_id;
-    const result = await updateTrip(
-      vehicleId,
-      origin,
-      destination,
-      date,
-      time,
-      fare,
-      tripId
-    );
-
-    return jsonResponse.success(res, 'success', 200, result.rows[0]);
+    if (findTrip.rows[0].status === 'Pending') {
+      const result = await updateTrip(
+        vehicleId,
+        origin,
+        destination,
+        date,
+        time,
+        fare,
+        tripId
+      );
+      return jsonResponse.success(res, 'success', 200, result.rows[0]);
+    } else {
+      return jsonResponse.error(res, 'error', 401, 'Trip cannot be updated');
+    }
   }
 }
 
