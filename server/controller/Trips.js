@@ -87,9 +87,12 @@ class TripController {
 
     if (findTrip.rows[0].user_id !== req.user.user_id)
       return jsonResponse.error(res, 'error', 401, 'Unauthorized access');
-      if(findTrip.rows[0].status === 'Pending')
-
+    if (findTrip.rows[0].status === 'Pending') {
       await cancelTrip(tripId);
+    } else {
+      return jsonResponse.error(res, 'error', 401, 'Trip cannot be cancelled');
+    }
+
     return jsonResponse.success(res, 'success', 200, req.user);
   }
 }
