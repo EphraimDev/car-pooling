@@ -7,7 +7,8 @@ import {
   deleteVehicle,
   createTrip,
   findTripById,
-  cancelTrip
+  cancelTrip,
+  viewTrips
 } from '../utils/queries';
 import { uploadImage } from '../utils/upload';
 
@@ -94,6 +95,24 @@ class TripController {
     }
 
     return jsonResponse.success(res, 'success', 200, req.user);
+  }
+  /**
+   * View all trips data
+   * @param  {object} req - Request object
+   * @param {object} res - Response object
+   * @return {json} res.json
+   */
+  static async viewAll(req, res) {
+    const trips = await viewTrips();
+
+    if (trips.rowCount < 1) {
+      return jsonResponse.error(res, 'error', 404, 'No trip found');
+    }
+    if (trips.rows.map(stat => stat.status === 'Pending')) {
+      return jsonResponse.success(res, 'success', 200, trips.rows);
+    } else {
+      return jsonResponse.error(res, 'error', 404, 'No active trips');
+    }
   }
 }
 

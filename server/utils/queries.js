@@ -75,3 +75,8 @@ export const cancelTrip= async (id) => {
 
   return trip;
 };
+export const viewTrips= async () => {
+  const trips = await pool.query(query.viewTrips);
+
+  return trips;
+};
