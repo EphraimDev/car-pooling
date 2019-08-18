@@ -61,6 +61,10 @@ class TripController {
       return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
     }
 
+    if (findTrip.rows[0].status !== 'Pending' && status === 'Pending') {
+      return jsonResponse.error(res, 'error', 400, 'Trip cannot be changed back to pending');
+    }
+
      if (findTrip.rows[0].status !== 'Pending' && (findTrip.rows[0].origin !== origin 
       || findTrip.rows[0].destination !== destination 
       || findTrip.rows[0].trip_date !== date 
