@@ -65,3 +65,8 @@ export const createTrip = async (id, vehicle, origin, destination, date, time, f
 
   return trip;
 };
+export const updateTrip = async (id, vehicle, origin, destination, date, time, fare) => {
+  const trip = await pool.query(query.updateTrip, [id,vehicle, origin, destination, date, time, fare, moment.updatedAt]);
+
+  return trip;
+};

@@ -1,5 +1,5 @@
 import jsonResponse from '../helper/responseHandler';
-import { findVehicleByPlateNo, createVehicle, findVehicleById, updateVehicle, deleteVehicle, createTrip } from '../utils/queries';
+import { findVehicleByPlateNo, createVehicle, findVehicleById, updateVehicle, deleteVehicle, createTrip,updateTrip } from '../utils/queries';
 import { uploadImage } from '../utils/upload';
 
 /**
@@ -38,6 +38,42 @@ class TripController {
       };
   
       return jsonResponse.success(res, 'success', 201, data);
+    }
+  /**
+   * Update trip
+   * @param  {object} req - Request object
+   * @param {object} res - Response object
+   * @return {json} res.json
+   */
+  static async update(req, res) {
+    const {
+        vehicle, origin, destination, date, time, fare
+      } = req.body;
+  const { tripId } = req.params;
+
+  const findTrip = await findTripById(tripId);
+
+  if (findTrip.rowCount < 1) {
+    return jsonResponse.error(res, 'error', 404, 'Trip does not exist');
+  }
+
+  if (findTrip.rows[0].user_id !== req.user.user_id) {
+    return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
+  }
+
+  
+  const result = await updateTrip(
+    vehicle,
+    origin,
+    destination,
+    date,
+    time,
+    fare
+  );
+
+  return jsonResponse.success(res, 'success', 200, result.rows[0]);
+    
+
     }
 
 }
