@@ -14,4 +14,5 @@ router.patch(
   trip,
   TripController.update
 );
+
 export default router;

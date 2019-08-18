@@ -9,6 +9,7 @@ import {
   findTripById,
   cancelTrip,
   updateTrip
+
 } from '../utils/queries';
 import { uploadImage } from '../utils/upload';
 
