@@ -101,38 +101,32 @@ class TripController {
    * @return {json} res.json
    */
   static async update(req, res) {
-    const {
-        vehicle, origin, destination, date, time, fare
-      } = req.body;
-  const { tripId } = req.params;
+    const { origin, destination, date, time, fare } = req.body;
+    const { tripId } = req.params;
 
-  const findTrip = await findTripById(tripId);
+    const findTrip = await findTripById(tripId);
 
-  if (findTrip.rowCount < 1) {
-    return jsonResponse.error(res, 'error', 404, 'Trip does not exist');
-  }
-
-  if (findTrip.rows[0].user_id !== req.user.user_id) {
-    return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
-  }
-
-  
-  const result = await updateTrip(
-    vehicle,
-    origin,
-    destination,
-    date,
-    time,
-    fare
-  );
-
-  return jsonResponse.success(res, 'success', 200, result.rows[0]);
-    
-
+    if (findTrip.rowCount < 1) {
+      return jsonResponse.error(res, 'error', 404, 'Trip does not exist');
     }
 
-  //   return jsonResponse.success(res, 'success', 200, req.user);
-  // }
+    if (findTrip.rows[0].user_id !== req.user.user_id) {
+      return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
+    }
+
+    const vehicleId = findTrip.rows[0].vehicle_id;
+    const result = await updateTrip(
+      vehicleId,
+      origin,
+      destination,
+      date,
+      time,
+      fare,
+      tripId
+    );
+
+    return jsonResponse.success(res, 'success', 200, result.rows[0]);
+  }
 }
 
 export default TripController;
