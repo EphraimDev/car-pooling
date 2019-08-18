@@ -69,9 +69,6 @@ class TripController {
       return jsonResponse.error(res, 'error', 404, 'Trip does not exist');
     }
 
-    if (findTrip.rows[0].user_id !== req.user.user_id)
-      return jsonResponse.error(res, 'error', 401, 'Unauthorized access');
-
     return jsonResponse.success(res, 'success', 200, findTrip.rows[0]);
   }
   /**
@@ -90,8 +87,9 @@ class TripController {
 
     if (findTrip.rows[0].user_id !== req.user.user_id)
       return jsonResponse.error(res, 'error', 401, 'Unauthorized access');
+      if(findTrip.rows[0].status === 'Pending')
 
-    await cancelTrip(tripId);
+      await cancelTrip(tripId);
     return jsonResponse.success(res, 'success', 200, req.user);
   }
 }
