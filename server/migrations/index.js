@@ -6,7 +6,7 @@ const queryText = `DROP TABLE IF EXISTS booking, trip, vehicle, users CASCADE;
   DROP TYPE IF EXISTS action;
 
   CREATE TYPE action AS ENUM
-  ('Active', 'Cancelled', 'Ended');
+  ('Pending', 'Started', 'Cancelled', 'Ended');
   
   CREATE TABLE users
   (
@@ -57,7 +57,7 @@ const queryText = `DROP TABLE IF EXISTS booking, trip, vehicle, users CASCADE;
       trip_date DATE NOT NULL,
       trip_time TIME NOT NULL,
       fare VARCHAR(128) NOT NULL,
-      status action default 'Active',
+      status action default 'Pending',
       deleted BOOLEAN Default '0',
       created_at TIMESTAMP,
       updated_at TIMESTAMP,
@@ -83,6 +83,6 @@ pool
   .then(() => {
     pool.end();
   })
-  .catch(() => {
+  .catch(err => {
     pool.end();
   });
