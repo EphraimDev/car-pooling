@@ -29,6 +29,7 @@ const tripSchema = Joi.object().keys({
   vehicle: Joi.string().required(),
   origin: Joi.string().required(),
   destination: Joi.string().required(),
+  status: Joi.string()
 });
 
 export { userSchema, vehicleSchema, tripSchema };
