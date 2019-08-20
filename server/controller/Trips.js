@@ -1,10 +1,6 @@
 import jsonResponse from '../helper/responseHandler';
 import {
-  findVehicleByPlateNo,
-  createVehicle,
   findVehicleById,
-  updateVehicle,
-  deleteVehicle,
   createTrip,
   findTripById,
   cancelTrip,
@@ -34,11 +30,6 @@ class TripController {
 
     if (findVehicle.rows[0].user_id !== req.user.user_id)
       return jsonResponse.error(res, 'error', 401, 'Unauthorized access');
-
-    //   const currentDateTime = new Date();
-    //   const tripDate = new Date(date + ' ' + time);
-    //   console.log(currentDateTime <= tripDate, currentDateTime, tripDate);
-    //   return;
 
     const newTrip = await createTrip(
       req.user.user_id,
