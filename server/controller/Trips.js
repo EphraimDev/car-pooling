@@ -5,6 +5,7 @@ import {
   findTripById,
   viewTrips,
   updateTrip
+
 } from '../utils/queries';
 
 /**
