@@ -54,8 +54,8 @@ const queryText = `DROP TABLE IF EXISTS booking, trip, vehicle, users CASCADE;
       vehicle_id INT REFERENCES vehicle(vehicle_id) NOT NULL,
       origin VARCHAR(500) NOT NULL,
       destination VARCHAR(500) NOT NULL,
-      trip_date DATE NOT NULL,
-      trip_time TIME NOT NULL,
+      trip_date VARCHAR(20) NOT NULL,
+      trip_time VARCHAR(20) NOT NULL,
       fare VARCHAR(128) NOT NULL,
       status action default 'Pending',
       deleted BOOLEAN Default '0',
@@ -83,6 +83,6 @@ pool
   .then(() => {
     pool.end();
   })
-  .catch(err => {
+  .catch((err) => {
     pool.end();
   });
