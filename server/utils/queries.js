@@ -65,12 +65,23 @@ export const createTrip = async (id, vehicle, origin, destination, date, time, f
 
   return trip;
 };
-
 export const findTripById = async (id) => {
   const trip = await pool.query(query.findTripById, [id]);
 
   return trip;
 }
+
+export const cancelTrip= async (id) => {
+  const trip = await pool.query(query.cancelTrip, [id]);
+
+  return trip;
+};
+
+export const viewTrips= async () => {
+  const trips = await pool.query(query.viewTrips);
+
+  return trips;
+};
 
 export const updateTrip = async (
   vehicle, origin, destination, date, time, fare, status, trip_id
