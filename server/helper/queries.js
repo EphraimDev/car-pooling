@@ -17,11 +17,11 @@ const query = {
     'INSERT INTO trip(user_id,vehicle_id,origin,destination,trip_date,trip_time,fare,created_at) values($1,$2,$3,$4,$5,$6,$7,$8) RETURNING trip.*',
 
   updateTrip:
-    'UPDATE trip SET vehicle_id=$1,origin=$2,destination=$3,trip_date=$4,trip_time=$5,fare=$6,status=$7,updated_at=$8 WHERE trip_id = $9 RETURNING RETURNING trip.*',
+    'UPDATE trip SET vehicle_id=$1,origin=$2,destination=$3,trip_date=$4,trip_time=$5,fare=$6,status=$7,updated_at=$8 WHERE trip_id = $9 RETURNING trip.*',
 
-  cancelTrip: 'DELETE FROM trip WHERE trip_id=$1;',
+  cancelTrip: 'UPDATE trip SET status=$2,deleted=$3,updated_at=$4 WHERE trip_id=$1 RETURNING trip.*;',
   findTripById:
-    'SELECT trip.*, users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year FROM trip INNER JOIN users ON trip.user_id = users.user_id INNER JOIN vehicle ON vehicle.vehicle_id=trip.vehicle_id WHERE trip.trip_id=$1',
+    'SELECT trip.*, users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year FROM trip INNER JOIN users ON trip.user_id = users.user_id INNER JOIN vehicle ON vehicle.vehicle_id=trip.vehicle_id WHERE trip_id=$1',
   viewTrips:
     'SELECT trip.*,users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year from trip INNER JOIN vehicle ON trip.user_id=vehicle.user_id INNER JOIN users ON users.user_id=trip.user_id'
 };
