@@ -21,9 +21,13 @@ const query = {
 
   cancelTrip: 'DELETE FROM trip WHERE trip_id=$1;',
   findTripById:
-    'SELECT trip.*, users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year FROM trip INNER JOIN users ON trip.user_id = users.user_id INNER JOIN vehicle ON vehicle.vehicle_id=trip.vehicle_id WHERE trip.trip_id=$1',
+    'SELECT trip.*, users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year,vehicle.capacity FROM trip INNER JOIN users ON trip.user_id = users.user_id INNER JOIN vehicle ON vehicle.vehicle_id=trip.vehicle_id WHERE trip.trip_id=$1',
   viewTrips:
-    'SELECT trip.*,users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year from trip INNER JOIN vehicle ON trip.user_id=vehicle.user_id INNER JOIN users ON users.user_id=trip.user_id'
+    'SELECT trip.*,users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year from trip INNER JOIN vehicle ON trip.user_id=vehicle.user_id INNER JOIN users ON users.user_id=trip.user_id',
+    bookTrip:
+    'INSERT INTO booking(trip_id,user_id,created_at,seat_number) VALUES($1,$2,$3,$4) returning *',
+    viewBookings:
+    'select * from booking where trip_id=$1'
 };
 
 export default query;

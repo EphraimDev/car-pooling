@@ -82,12 +82,25 @@ export const viewTrips= async () => {
 
   return trips;
 };
+export const viewBookings= async (id) => {
+  const bookings = await pool.query(query.viewBookings,[id]);
+
+  return bookings;
+};
 
 export const updateTrip = async (
   vehicle, origin, destination, date, time, fare, status, trip_id
 ) => {
   const trip = await pool.query(query.updateVehicle,
     [vehicle, origin, destination, date, time, fare, status, moment.updatedAt, trip_id]);
+
+  return trip;
+};
+export const bookTrip = async (
+  trip_id, user_id,seat_number
+) => {
+  const trip = await pool.query(query.bookTrip,
+    [trip_id, user_id, moment.createdAt,seat_number]);
 
   return trip;
 };

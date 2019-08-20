@@ -4,8 +4,9 @@ import {
   createTrip,
   findTripById,
   viewTrips,
-  updateTrip
-
+  updateTrip,
+  bookTrip,
+  viewBookings
 } from '../utils/queries';
 
 /**
@@ -77,7 +78,6 @@ class TripController {
       return jsonResponse.error(res, 'error', 404, 'Trip not found');
     }
 
-     
     if (findTrip.rows[0].user_id !== req.user.user_id)
       return jsonResponse.error(res, 'error', 401, 'Unauthorized access');
     if (findTrip.rows[0].status === 'Pending') {
@@ -113,11 +113,9 @@ class TripController {
    */
   static async update(req, res) {
     const { tripId } = req.params;
-    const {
-      vehicle, origin, destination, date, time, fare, status
-    } = req.body;
+    const { vehicle, origin, destination, date, time, fare, status } = req.body;
 
-    console.log(vehicle, origin, destination, date, time, fare, status)
+    console.log(vehicle, origin, destination, date, time, fare, status);
 
     const findTrip = await findTripById(tripId);
 
@@ -129,33 +127,72 @@ class TripController {
       return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
     }
 
-    if (findTrip.rows[0].status === 'Cancelled' || findTrip.rows[0].status === 'Ended') {
+    if (
+      findTrip.rows[0].status === 'Cancelled' ||
+      findTrip.rows[0].status === 'Ended'
+    ) {
       return jsonResponse.error(res, 'error', 400, 'Trip is no more active');
     }
 
-    // if (findTrip.rows[0].status !== 'Pending' && status === 'Pending') {
-    //   // if (findTrip.rows[0].origin !== origin 
-    //   //   || findTrip.rows[0].destination !== destination 
-    //   //   || findTrip.rows[0].trip_date !== date 
-    //   //   || findTrip.rows[0].trip_time !== time 
-    //   //   || findTrip.rows[0].fare !== fare) {
-    //   //   return jsonResponse.error(res, 'error', 400, 'Trip cannot be modified');
-    //   //  }
-
-    //   return jsonResponse.error(res, 'error', 400, 'Trip cannot be changed back to pending');
-       
-    // }
-
+    
     if (findTrip.rows[0].status === 'Started' && status !== 'Ended') {
       return jsonResponse.error(res, 'error', 400, 'Invalid trip update');
     }
 
-      const result = await updateTrip(
-        vehicle, origin, destination, date, time, fare, status, tripId
-      );
+    const result = await updateTrip(
+      vehicle,
+      origin,
+      destination,
+      date,
+      time,
+      fare,
+      status,
+      tripId
+    );
 
-      return jsonResponse.success(res, 'success', 200, result.rows[0]);
-    
+    return jsonResponse.success(res, 'success', 200, result.rows[0]);
+  }
+  /**
+   * Book a trip
+   * @param  {object} req - Request object
+   * @param {object} res - Response object
+   * @return {json} res.json
+   */
+  static async book(req, res) {
+    const { tripId } = req.params;
+
+    const trip = await findTripById(tripId);
+
+    if (trip.rowCount < 1) {
+      return jsonResponse.error(res, 'error', 404, 'No trip found');
+    }
+
+    if (trip.rows[0].status === 'Pending') {
+      let seatNumber = 0;
+
+      let bookings = await viewBookings(tripId);
+
+      if (bookings.rows.length === 0) seatNumber = 1;
+      if (bookings.rows.length === 1) seatNumber = 2;
+      if (bookings.rows.length === 2) seatNumber = 3;
+      if (bookings.rows.length === 3) seatNumber = 4;
+      if (bookings.rows.length === 4) seatNumber = 5;
+
+      if (bookings.rows.length + 1 > trip.rows[0].capacity) {
+        return jsonResponse.error(res, 'error', 404, 'Capacity full');
+      }
+      const booking = await bookTrip(tripId, req.user.user_id, seatNumber);
+
+      return jsonResponse.success(res, 'success', 200, booking.rows);
+    } else if (
+      trip.rows[0].status === 'Cancelled' ||
+      trip.rows[0].status === 'Ended' ||
+      trip.rows[0].status === 'Started' 
+    ) {
+      return jsonResponse.error(res, 'error', 400, 'Trip is no more active');
+    } else {
+      return jsonResponse.error(res, 'error', 404, 'Unable to book trip');
+    }
   }
 }
 
