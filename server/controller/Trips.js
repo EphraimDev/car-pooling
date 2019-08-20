@@ -3,11 +3,10 @@ import {
   findVehicleById,
   createTrip,
   findTripById,
-  cancelTrip,
   viewTrips,
   updateTrip
+
 } from '../utils/queries';
-import { uploadImage } from '../utils/upload';
 
 /**
  * @exports
@@ -78,6 +77,7 @@ class TripController {
       return jsonResponse.error(res, 'error', 404, 'Trip not found');
     }
 
+     
     if (findTrip.rows[0].user_id !== req.user.user_id)
       return jsonResponse.error(res, 'error', 401, 'Unauthorized access');
     if (findTrip.rows[0].status === 'Pending') {
@@ -112,8 +112,12 @@ class TripController {
    * @return {json} res.json
    */
   static async update(req, res) {
-    const { origin, destination, date, time, fare } = req.body;
     const { tripId } = req.params;
+    const {
+      vehicle, origin, destination, date, time, fare, status
+    } = req.body;
+
+    console.log(vehicle, origin, destination, date, time, fare, status)
 
     const findTrip = await findTripById(tripId);
 
@@ -124,21 +128,34 @@ class TripController {
     if (findTrip.rows[0].user_id !== req.user.user_id) {
       return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
     }
-    const vehicleId = findTrip.rows[0].vehicle_id;
-    if (findTrip.rows[0].status === 'Pending') {
-      const result = await updateTrip(
-        vehicleId,
-        origin,
-        destination,
-        date,
-        time,
-        fare,
-        tripId
-      );
-      return jsonResponse.success(res, 'success', 200, result.rows[0]);
-    } else {
-      return jsonResponse.error(res, 'error', 401, 'Trip cannot be updated');
+
+    if (findTrip.rows[0].status === 'Cancelled' || findTrip.rows[0].status === 'Ended') {
+      return jsonResponse.error(res, 'error', 400, 'Trip is no more active');
     }
+
+    // if (findTrip.rows[0].status !== 'Pending' && status === 'Pending') {
+    //   // if (findTrip.rows[0].origin !== origin 
+    //   //   || findTrip.rows[0].destination !== destination 
+    //   //   || findTrip.rows[0].trip_date !== date 
+    //   //   || findTrip.rows[0].trip_time !== time 
+    //   //   || findTrip.rows[0].fare !== fare) {
+    //   //   return jsonResponse.error(res, 'error', 400, 'Trip cannot be modified');
+    //   //  }
+
+    //   return jsonResponse.error(res, 'error', 400, 'Trip cannot be changed back to pending');
+       
+    // }
+
+    if (findTrip.rows[0].status === 'Started' && status !== 'Ended') {
+      return jsonResponse.error(res, 'error', 400, 'Invalid trip update');
+    }
+
+      const result = await updateTrip(
+        vehicle, origin, destination, date, time, fare, status, tripId
+      );
+
+      return jsonResponse.success(res, 'success', 200, result.rows[0]);
+    
   }
 }
 
