@@ -15,6 +15,5 @@ router.patch(
   trip,
   TripController.update
 );
-router.post('/:tripId/book', authorization.authenticate, trip, TripController.book);
 
 export default router;

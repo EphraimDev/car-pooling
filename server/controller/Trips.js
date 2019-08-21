@@ -4,9 +4,8 @@ import {
   createTrip,
   findTripById,
   viewTrips,
-  updateTrip,
-  bookTrip,
-  viewBookings
+  updateTrip
+  
 } from '../utils/queries';
 
 /**
@@ -152,48 +151,7 @@ class TripController {
 
     return jsonResponse.success(res, 'success', 200, result.rows[0]);
   }
-  /**
-   * Book a trip
-   * @param  {object} req - Request object
-   * @param {object} res - Response object
-   * @return {json} res.json
-   */
-  static async book(req, res) {
-    const { tripId } = req.params;
-
-    const trip = await findTripById(tripId);
-
-    if (trip.rowCount < 1) {
-      return jsonResponse.error(res, 'error', 404, 'No trip found');
-    }
-
-    if (trip.rows[0].status === 'Pending') {
-      let seatNumber = 0;
-
-      let bookings = await viewBookings(tripId);
-
-      if (bookings.rows.length === 0) seatNumber = 1;
-      if (bookings.rows.length === 1) seatNumber = 2;
-      if (bookings.rows.length === 2) seatNumber = 3;
-      if (bookings.rows.length === 3) seatNumber = 4;
-      if (bookings.rows.length === 4) seatNumber = 5;
-
-      if (bookings.rows.length + 1 > trip.rows[0].capacity) {
-        return jsonResponse.error(res, 'error', 404, 'Capacity full');
-      }
-      const booking = await bookTrip(tripId, req.user.user_id, seatNumber);
-
-      return jsonResponse.success(res, 'success', 200, booking.rows);
-    } else if (
-      trip.rows[0].status === 'Cancelled' ||
-      trip.rows[0].status === 'Ended' ||
-      trip.rows[0].status === 'Started' 
-    ) {
-      return jsonResponse.error(res, 'error', 400, 'Trip is no more active');
-    } else {
-      return jsonResponse.error(res, 'error', 404, 'Unable to book trip');
-    }
-  }
+  
 }
 
 export default TripController;
