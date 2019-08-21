@@ -4,8 +4,9 @@ import {
   createTrip,
   findTripById,
   viewTrips,
-  updateTrip
-  
+  updateTrip,
+  cancelTrip
+
 } from '../utils/queries';
 
 /**
@@ -63,6 +64,7 @@ class TripController {
 
     return jsonResponse.success(res, 'success', 200, findTrip.rows[0]);
   }
+
   /**
    * Cancel trip
    * @param  {object} req - Request object
@@ -79,13 +81,14 @@ class TripController {
 
     if (findTrip.rows[0].user_id !== req.user.user_id)
       return jsonResponse.error(res, 'error', 401, 'Unauthorized access');
-    if (findTrip.rows[0].status === 'Pending') {
-      await cancelTrip(tripId);
-      return jsonResponse.success(res, 'success', 200, req.user);
-    } else {
-      return jsonResponse.error(res, 'error', 401, 'Trip cannot be cancelled');
-    }
+    
+    if (findTrip.rows[0].status !== 'Pending')
+      return jsonResponse.error(res, 'error', 400, 'Trip cannot be cancelled');
+    
+    const trip = await cancelTrip(tripId);
+    return jsonResponse.success(res, 'success', 200, trip.rows[0]);
   }
+
   /**
    * View all trips data
    * @param  {object} req - Request object
@@ -114,8 +117,6 @@ class TripController {
     const { tripId } = req.params;
     const { vehicle, origin, destination, date, time, fare, status } = req.body;
 
-    console.log(vehicle, origin, destination, date, time, fare, status);
-
     const findTrip = await findTripById(tripId);
 
     if (findTrip.rowCount < 1) {
@@ -133,23 +134,18 @@ class TripController {
       return jsonResponse.error(res, 'error', 400, 'Trip is no more active');
     }
 
-    
-    if (findTrip.rows[0].status === 'Started' && status !== 'Ended') {
+    if ((findTrip.rows[0].status === 'Started' && status !== 'Ended') 
+    || status === "Cancelled" 
+    || (findTrip.rows[0].status === 'Pending' && status !== 'Started')) {
       return jsonResponse.error(res, 'error', 400, 'Invalid trip update');
     }
 
     const result = await updateTrip(
-      vehicle,
-      origin,
-      destination,
-      date,
-      time,
-      fare,
-      status,
-      tripId
+      vehicle, origin, destination, date, time, fare, status, tripId
     );
 
     return jsonResponse.success(res, 'success', 200, result.rows[0]);
+    
   }
   
 }

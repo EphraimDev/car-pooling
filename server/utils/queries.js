@@ -72,7 +72,7 @@ export const findTripById = async (id) => {
 }
 
 export const cancelTrip= async (id) => {
-  const trip = await pool.query(query.cancelTrip, [id]);
+  const trip = await pool.query(query.cancelTrip, [id, 'Cancelled', '1', moment.updatedAt]);
 
   return trip;
 };
@@ -91,7 +91,7 @@ export const viewBookings= async (id) => {
 export const updateTrip = async (
   vehicle, origin, destination, date, time, fare, status, trip_id
 ) => {
-  const trip = await pool.query(query.updateVehicle,
+  const trip = await pool.query(query.updateTrip,
     [vehicle, origin, destination, date, time, fare, status, moment.updatedAt, trip_id]);
 
   return trip;
