@@ -136,7 +136,7 @@ class TripController {
 
     if ((findTrip.rows[0].status === 'Started' && status !== 'Ended') 
     || status === "Cancelled" 
-    || (findTrip.rows[0].status === 'Pending' && status !== 'Started')) {
+    || (findTrip.rows[0].status === 'Cancelled' && status !== 'Started')) {
       return jsonResponse.error(res, 'error', 400, 'Invalid trip update');
     }
 
