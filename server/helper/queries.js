@@ -26,8 +26,10 @@ const query = {
     'SELECT trip.*,users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year from trip INNER JOIN vehicle ON trip.user_id=vehicle.user_id INNER JOIN users ON users.user_id=trip.user_id',
     bookTrip:
     'INSERT INTO booking(trip_id,user_id,created_at,seat_number) VALUES($1,$2,$3,$4) returning *',
+    viewBooking:
+    'select * from booking where trip_id=$1',
     viewBookings:
-    'select * from booking where trip_id=$1'
+    'select * from booking where user_id=$1'
 };
 
 export default query;

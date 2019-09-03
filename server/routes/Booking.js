@@ -10,5 +10,10 @@ router.post(
   authorization.authenticate,
   BookingsController.book
 );
+router.get(
+  '/',
+  authorization.authenticate,
+  BookingsController.bookings
+);
 
 export default router;

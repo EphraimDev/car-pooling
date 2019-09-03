@@ -87,7 +87,6 @@ describe('Booking', () => {
       .post('/api/v1/book-trip/2')
       .set('authorization', token)
       .then(res => {
-        // console.log(res);
         expect(res.status).to.equal(200);
         expect(res.body.data).to.be.an('array');
         expect(res.body.data[0]).to.have.keys(
@@ -100,6 +99,28 @@ describe('Booking', () => {
           'updated_at',
           'deleted_at'
         );
+        done();
+      });
+  });
+  it('should view all bookings a user has made', done => {
+    chai
+      .request(app)
+      .get('/api/v1/book-trip')
+      .set('authorization', token)
+      .then(res => {
+        expect(res.status).to.equal(200);
+        expect(res.body.data).to.be.an('array');
+        expect(res.body.data[0]).to.have.keys(
+          'booking_id',
+          'trip_id',
+          'user_id',
+          'seat_number',
+          'deleted',
+          'created_at',
+          'updated_at',
+          'deleted_at'
+        );
+
         done();
       });
   });
