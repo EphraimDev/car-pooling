@@ -82,6 +82,11 @@ export const viewTrips= async () => {
 
   return trips;
 };
+export const viewBooking= async (id) => {
+  const booking = await pool.query(query.viewBooking,[id]);
+
+  return booking;
+};
 export const viewBookings= async (id) => {
   const bookings = await pool.query(query.viewBookings,[id]);
 
