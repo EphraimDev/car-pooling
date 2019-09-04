@@ -8,6 +8,7 @@ chai.use(chaiHttp);
 
 let token = 'bearer ';
 let wrongToken = 'bearer ';
+let token2 = 'bearer ';
 
 describe('Booking', () => {
   it('should sign a registered user in', done => {
@@ -21,6 +22,20 @@ describe('Booking', () => {
       .then(res => {
         const { body } = res;
         token += body.data.token;
+        done();
+      });
+  });
+  it('should sign a second registered user in', done => {
+    chai
+      .request(app)
+      .post('/api/v1/auth/signin')
+      .send({
+        email: 'another@test.co',
+        password: 'Password1!'
+      })
+      .then(res => {
+        const { body } = res;
+        token2 += body.data.token;
         done();
       });
   });
@@ -40,22 +55,6 @@ describe('Booking', () => {
       .then(res => {
         // console.log(res);
         expect(res.status).to.equal(201);
-        expect(res.body.data).to.be.an('object');
-        expect(res.body.data).to.have.keys(
-          'trip_id',
-          'user_id',
-          'vehicle_id',
-          'origin',
-          'destination',
-          'trip_date',
-          'trip_time',
-          'fare',
-          'status',
-          'deleted',
-          'created_at',
-          'updated_at',
-          'deleted_at'
-        );
         done();
       });
   });
@@ -73,7 +72,7 @@ describe('Booking', () => {
   it('should produce an error if token is invalid or not provided', done => {
     chai
       .request(app)
-      .post('/api/v1/book-trip/2')
+      .post('/api/v1/book-trip/3')
       .set('authorization', wrongToken)
       .then(res => {
         expect(res.status).to.equal(401);
@@ -84,7 +83,7 @@ describe('Booking', () => {
   it('should book a trip', done => {
     chai
       .request(app)
-      .post('/api/v1/book-trip/2')
+      .post('/api/v1/book-trip/3')
       .set('authorization', token)
       .then(res => {
         expect(res.status).to.equal(200);
@@ -99,6 +98,28 @@ describe('Booking', () => {
           'updated_at',
           'deleted_at'
         );
+        done();
+      });
+  });
+  it('should produce an error for vehicle already full', done => {
+    chai
+      .request(app)
+      .post('/api/v1/book-trip/3')
+      .set('authorization', token)
+      .then(res => {
+        expect(res.status).to.equal(404);
+        expect(res.body.error).to.equal('Capacity full');
+        done();
+      });
+  });
+  it('should produce an error for unable to book trip', done => {
+    chai
+      .request(app)
+      .post('/api/v1/book-trip/1')
+      .set('authorization', token)
+      .then(res => {
+        expect(res.status).to.equal(404);
+        expect(res.body.error).to.equal('Unable to book trip');
         done();
       });
   });
@@ -120,6 +141,18 @@ describe('Booking', () => {
           'updated_at',
           'deleted_at'
         );
+
+        done();
+      });
+  });
+  it('should produce error for user with no bookings', done => {
+    chai
+      .request(app)
+      .get('/api/v1/book-trip')
+      .set('authorization', token2)
+      .then(res => {
+        expect(res.status).to.equal(404);
+        expect(res.body.error).to.equal('No bookings for this user');
 
         done();
       });

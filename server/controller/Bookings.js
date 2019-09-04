@@ -30,20 +30,14 @@ class BookingsController {
       let seatNumber = 0;
 
       let bookings = await viewBooking(tripId);
-      seatNumber = bookings.rows.length + 1;
+      seatNumber = bookings.rowCount + 1;
 
-      if (bookings.rows.length + 1 > trip.rows[0].capacity) {
+      if (bookings.rowCount + 1 > trip.rows[0].capacity) {
         return jsonResponse.error(res, 'error', 404, 'Capacity full');
       }
       const booking = await bookTrip(tripId, req.user.user_id, seatNumber);
 
       return jsonResponse.success(res, 'success', 200, booking.rows);
-    } else if (
-      trip.rows[0].status === 'Cancelled' ||
-      trip.rows[0].status === 'Ended' ||
-      trip.rows[0].status === 'Started'
-    ) {
-      return jsonResponse.error(res, 'error', 400, 'Trip is no more active');
     } else {
       return jsonResponse.error(res, 'error', 404, 'Unable to book trip');
     }
@@ -56,7 +50,7 @@ class BookingsController {
    */
   static async bookings(req, res) {      
       let booking = await viewBookings(req.user.user_id);
-      if (booking.rows.length <=0) {
+      if (booking.rowCount <= 0 ) {
         return jsonResponse.error(res, 'error', 404, 'No bookings for this user');
       }
       return jsonResponse.success(res, 'success', 200, booking.rows);

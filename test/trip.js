@@ -8,6 +8,7 @@ chai.use(chaiHttp);
 
 let token = 'bearer ';
 let token2 = 'bearer ';
+let tripId = 0;
 
 describe('Trips', () => {
   describe('Create a trip', () => {
@@ -48,7 +49,7 @@ describe('Trips', () => {
         .field('manufacturer', 'Way')
         .field('model', 'Farer')
         .field('year', '1234')
-        .field('capacity', '5')
+        .field('capacity', '1')
         .attach('image', './test/files/autograder.png', 'autograder.png')
         .then(res => {
           const { body } = res;
@@ -57,6 +58,21 @@ describe('Trips', () => {
           expect(body).to.contain.property('data');
           expect(body.status).to.equal('success');
           expect(body.data).to.be.an('object');
+          done();
+        });
+    });
+    it('should add another vehicle', done => {
+      chai
+        .request(app)
+        .post('/api/v1/vehicles')
+        .set('authorization', token)
+        .field('number_plate', 'ABC123E')
+        .field('manufacturer', 'Way')
+        .field('model', 'Farer')
+        .field('year', '1234')
+        .field('capacity', '1')
+        .then(res => {
+          expect(res.status).to.equal(201);
           done();
         });
     });
@@ -274,6 +290,25 @@ describe('Trips', () => {
           done();
         });
     });
+
+    it('should create a second trip', done => {
+      chai
+        .request(app)
+        .post('/api/v1/trips')
+        .set('authorization', token)
+        .send({
+          vehicle: '3',
+          origin: 'Lekki',
+          destination: 'Ajah',
+          date: '13/12/2019',
+          time: '12:00',
+          fare: '1900'
+        })
+        .then(res => {
+          expect(res.status).to.equal(201);
+          done();
+        });
+    });
   });
   describe('Find Trip', () => {
     it('finds a trip by id', done => {
@@ -305,7 +340,8 @@ describe('Trips', () => {
             'manufacturer',
             'model',
             'color',
-            'year'
+            'year',
+            'capacity'
           );
           done();
         });
@@ -473,6 +509,47 @@ describe('Trips', () => {
           done();
         });
     });
+
+    it('should update the second trip', done => {
+      chai
+        .request(app)
+        .patch(`/api/v1/trips/2`)
+        .set('authorization', token)
+        .send({
+          vehicle: '3',
+          origin: 'Lekki',
+          destination: 'Ajah',
+          date: '13/12/2019',
+          time: '12:00',
+          fare: '1900',
+          status: 'Started'
+        })
+        .then(res => {
+          expect(res.status).to.equal(200);
+          done();
+        });
+    });
+
+    it('should update the second trip', done => {
+      chai
+        .request(app)
+        .patch(`/api/v1/trips/2`)
+        .set('authorization', token)
+        .send({
+          vehicle: '3',
+          origin: 'Lekki',
+          destination: 'Ajah',
+          date: '13/12/2019',
+          time: '12:00',
+          fare: '1900',
+          status: 'Pending'
+        })
+        .then(res => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal('Invalid trip update');
+          done();
+        });
+    });
   });
   describe('Cancel trip', () => {
     it('should produce an error if an invalid trip id is provided', done => {
@@ -497,6 +574,17 @@ describe('Trips', () => {
           done();
         });
     });
+    it('should produce an error if the trip has started', done => {
+      chai
+        .request(app)
+        .delete('/api/v1/trips/2')
+        .set('authorization', token)
+        .then(res => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal('Trip cannot be cancelled');
+          done();
+        });
+    });
     it('should cancel a trip', done => {
       chai
         .request(app)
@@ -504,6 +592,26 @@ describe('Trips', () => {
         .set('authorization', token)
         .then(res => {
           expect(res.status).to.equal(200);
+          done();
+        });
+    });
+    it('should produce an error for trip that has ended or cancelled', done => {
+      chai
+        .request(app)
+        .patch('/api/v1/trips/1')
+        .set('authorization', token)
+        .send({
+          vehicle: '2',
+          origin: 'Berger',
+          destination: 'Ikeja',
+          date: '19/11/2019',
+          time: '20:00',
+          fare: '2000',
+          status: 'Pending'
+        })
+        .then(res => {
+          expect(res.status).to.equal(400);
+          expect(res.body.error).to.equal("Trip is no more active");
           done();
         });
     });

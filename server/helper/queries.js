@@ -21,7 +21,7 @@ const query = {
 
   cancelTrip: 'UPDATE trip SET status=$2,deleted=$3,updated_at=$4 WHERE trip_id=$1 RETURNING trip.*;',
   findTripById:
-    'SELECT trip.*, users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year FROM trip INNER JOIN users ON trip.user_id = users.user_id INNER JOIN vehicle ON vehicle.vehicle_id=trip.vehicle_id WHERE trip_id=$1',
+    'SELECT trip.*, users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year,vehicle.capacity FROM trip INNER JOIN users ON trip.user_id = users.user_id INNER JOIN vehicle ON vehicle.vehicle_id=trip.vehicle_id WHERE trip_id=$1',
   viewTrips:
     'SELECT trip.*,users.first_name,users.last_name, users.img,vehicle.number_plate,vehicle.manufacturer,vehicle.model,vehicle.color,vehicle.year from trip INNER JOIN vehicle ON trip.user_id=vehicle.user_id INNER JOIN users ON users.user_id=trip.user_id',
     bookTrip:

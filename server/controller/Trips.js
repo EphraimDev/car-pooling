@@ -101,11 +101,9 @@ class TripController {
     if (trips.rowCount < 1) {
       return jsonResponse.error(res, 'error', 404, 'No trip found');
     }
-    if (trips.rows.map(stat => stat.status === 'Pending')) {
-      return jsonResponse.success(res, 'success', 200, trips.rows);
-    } else {
-      return jsonResponse.error(res, 'error', 404, 'No active trips');
-    }
+
+    return jsonResponse.success(res, 'success', 200, trips.rows);
+    
   }
   /**
    * Update trip
@@ -126,7 +124,7 @@ class TripController {
     if (findTrip.rows[0].user_id !== req.user.user_id) {
       return jsonResponse.error(res, 'error', 401, 'Unauthorized user');
     }
-
+ 
     if (
       findTrip.rows[0].status === 'Cancelled' ||
       findTrip.rows[0].status === 'Ended'
