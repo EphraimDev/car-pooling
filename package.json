@@ -13,7 +13,9 @@
     "test": "cross-env NODE_ENV=test nyc mocha --require @babel/register --timeout 6000 test/index.js --exit",
     "test:migrations": "cross-env NODE_ENV=test babel-node server/migrations/index",
     "pretest": "npm run test:migrations",
-    "posttest": "npm run coverage"
+    "posttest": "npm run coverage",
+    "prod:migrate": "node dist/migrations/index",
+    "production": "npm-run-all prod:migrate start"
   },
   "repository": {
     "type": "git",
