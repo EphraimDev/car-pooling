@@ -2,6 +2,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import morganLogger from 'morgan';
+import cors from 'cors';
 
 import router from './routes';
 
@@ -14,10 +15,11 @@ app.use(
   })
 );
 app.use(bodyParser.json());
+app.use(cors());
 app.use('/api/v1', router);
 
 app.get('/', (_req, res) => {
-  res.status(200).send('Welcome to Join U');
+  res.status(200).send('Welcome to Car Pooling App');
 });
 
 const port = process.env.PORT || 1000;
