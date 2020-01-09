@@ -81,6 +81,10 @@ class AuthController {
   static verifyPassword(password, hash) {
     return bcrypt.compare(password, hash);
   }
+
+  static loadUser(req, res) {
+    return jsonResponse.success(res, 'success', 200, req.user)
+  }
 }
 
 export default AuthController;
