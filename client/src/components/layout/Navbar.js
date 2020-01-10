@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useContext } from 'react';
 import PropTypes from 'prop-types';
 import {
   Collapse,
@@ -10,46 +9,63 @@ import {
   NavItem,
   NavLink
 } from 'reactstrap';
-import { loggedIn } from '../../actions/auth';
 
-const NavBar = ({ loggedIn, isAuthenticated }) => {
+import AuthContext from '../../context/auth/authContext';
+
+const NavBar = ({ title }) => {
   const [isOpen, setIsOpen] = useState(false);
-
-  useEffect(() => {
-    //   check if authenticated
-    loggedIn();
-    // eslint-disable-next-line
-  }, [])
 
   const toggle = () => setIsOpen(!isOpen);
 
+  const authContext = useContext(AuthContext);
+
+  const { isAuthenticated, logoutUser } = authContext;
+
+  const onLogout = () => {
+    logoutUser();
+}
+
+  const authLinks = (
+    <Nav className='ml-auto' navbar>
+      <NavItem>
+        <NavLink href='/profile'>Profile</NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink href='#!' onClick={onLogout}>Sign out</NavLink>
+      </NavItem>
+    </Nav>
+  );
+
+  const guestLinks = (
+    <Nav className='ml-auto' navbar>
+      <NavItem>
+        <NavLink href='/login'>Login</NavLink>
+      </NavItem>
+      <NavItem>
+        <NavLink href='/register'>Register</NavLink>
+      </NavItem>
+    </Nav>
+  );
+
   return (
     <div>
-      <Navbar color="light" light expand="md">
-        <NavbarBrand href="/">CarpoolNG</NavbarBrand>
+      <Navbar className="rt-navbar" color='light' light expand='md'>
+        <NavbarBrand href='/'>{ title }</NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
-          <Nav className="ml-auto" navbar>
-            <NavItem>
-              <NavLink href="/login">Login</NavLink>
-            </NavItem>
-            <NavItem>
-              <NavLink href="/register">Register</NavLink>
-            </NavItem>
-          </Nav>
+          {isAuthenticated ? authLinks : guestLinks}
         </Collapse>
       </Navbar>
     </div>
   );
-}
+};
 
 NavBar.propTypes = {
-    loggedIn: PropTypes.func.isRequired,
-    isAuthenticated: PropTypes.bool.isRequired
-}
+  title: PropTypes.string.isRequired
+};
 
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-})
+NavBar.defaultProps = {
+  title: 'CarpoolNG'
+};
 
-export default connect(mapStateToProps, { loggedIn })(NavBar);
+export default NavBar;

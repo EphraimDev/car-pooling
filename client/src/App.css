@@ -1,0 +1,118 @@
+.rt-home-section {
+    margin-top: -56px
+}
+.rt-background-image {
+    content: url('/assets/images/home2.jpg');
+    width: 100vw;
+    height: 100vh;
+}
+
+.rt-background-text {
+    position: absolute;
+    bottom: 0;
+    left: 0.5em;
+    width: 400px;
+    font-weight: bold;
+    color: #fff;
+}
+
+.rt-navbar {
+    z-index: 10000;
+}
+
+The container box is relative so we can position stuff inside of it 
+*/
+.image-box {
+  position: relative;
+}
+
+
+.image-box__background,
+.image-box__overlay {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+/* 
+The background image div sizes and positions the background itself.
+It's also at the bottom-most position in our "div stack" (z-index 1)
+
+We set the image url via a CSS custom property, that's set via the style attribute in our HTML
+*/
+.image-box__background {
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-image: url('/assets/images/home2.jpg');
+  z-index: 1;
+  height: 500px;
+}
+
+/* 
+The overlay div is just a colored element with some opacity.
+It's above the background image in our stack, so it appears to 
+darken the image 
+*/
+.image-box__overlay {
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  height: 500px;
+}
+
+/* 
+The content div is at the top of our stack. 
+We'd probably add some padding or flexbox properties here as well, 
+to place the content appropriately
+*/
+.image-box__content {
+  position: relative;
+  z-index: 3;
+  color: white;
+  top: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.image-box__link {
+    position: relative;
+    z-index: 3;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 200px;
+  }
+
+/* just for the demo */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+h1 {
+  font-size: 30px;
+}
+
+.popular-title {
+    text-align: center;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    padding: 10px;
+  }
+  
+  .grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+  }
+
+  .checked {
+    color: orange;
+  }

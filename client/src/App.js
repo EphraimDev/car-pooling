@@ -1,26 +1,32 @@
-import React from 'react';
-import { Provider } from 'react-redux';
+import React, { Fragment } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './App.css';
-import store from './store';
 import Navbar from './components/layout/Navbar';
 import Home from './pages/Home';
 
-const App = () => {
+import AuthState from './context/auth/AuthState';
+import setAuthToken from './utils/setAuthToken';
 
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
+
+const App = () => {
   return (
-    <Provider store={store}>
+    <AuthState>
       <Router>
-        <div className='App'>
+        <Fragment>
           <Navbar />
-          {/* <Alert /> */}
-          <Switch>
-            <Route exact path='/' component={Home} />
-          </Switch>
-        </div>
+            <Switch>
+              {/* <PrivateRoute exact path='/' component={Home} /> */}
+              <Route exact path='/' component={Home} />
+              {/* <Route exact path='/register' component={Register} />
+              <Route exact path='/login' component={Login} /> */}
+            </Switch>
+        </Fragment>
       </Router>
-    </Provider>
+    </AuthState>
   );
 };
 
